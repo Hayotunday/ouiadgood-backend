@@ -18,7 +18,7 @@ router.get('/:id', (req, res) => {
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.post('/', (req, res) => {
+router.post('/add', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const username = req.body.email;
