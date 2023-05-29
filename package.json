@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
-    "vercel-build": "echo"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
