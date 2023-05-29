@@ -96,17 +96,17 @@ router.delete('/bookmark/:id', async (req, res) => {
 
 // Hearts
 router.get('/getheart/:id', async (req, res) => {
+  await User.findById(req.params.id)
+    .then((user) => { res.json(user.heart) })
+    .catch((err) => { res.status(400).json('Error: ' + err) })
+});
+
+router.patch('/heart/:id', async (req, res) => {
   await User.updateOne(
     { id: req.params.id },
     { $set: { heart: req.body.heart } }
   )
     .then((user) => { res.json(user) })
-    .catch((err) => { res.status(400).json('Error: ' + err) })
-});
-
-router.patch('/heart', async (req, res) => {
-  await User.findById(req.params.id)
-    .then((user) => { res.json(user.heart) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
