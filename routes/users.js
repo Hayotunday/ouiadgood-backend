@@ -31,7 +31,7 @@ router.post('/add', async (req, res) => {
 
     if (user) {
       // User already exists, send user data
-      res.status(200).json({ user });
+      res.status(200).json(user);
     } else {
       // User doesn't exist, create a new user and add to the database
       await newUser.save()
