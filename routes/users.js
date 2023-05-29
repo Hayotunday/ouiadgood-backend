@@ -54,15 +54,17 @@ router.patch('/', async (req, res) => {
     { email: req.body.email },
     { $set: { username: req.body.username } }
   )
+  await User.findOne({ email: req.body.email })
     .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.patch('/resetpassword/', async (req, res) => {
+router.patch('/resetpassword', async (req, res) => {
   await User.updateOne(
     { email: req.body.email },
     { $set: { password: req.body.password } }
   )
+  await User.findOne({ email: req.body.email })
     .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
