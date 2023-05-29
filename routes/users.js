@@ -26,7 +26,7 @@ router.post('/add', (req, res) => {
   const newUser = new User({ email, username, password, heart: '0' });
 
   newUser.save()
-    .then(() => { res.json('User added!') })
+    .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -41,7 +41,7 @@ router.patch('/', (req, res) => {
     { email: req.body.email },
     { $set: { username: req.body.username } }
   )
-    .then(() => { res.json('Username updated!') })
+    .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -50,7 +50,7 @@ router.patch('/resetpassword/', (req, res) => {
     { email: req.body.email },
     { $set: { password: req.body.password } }
   )
-    .then(() => { res.json('User password updated!') })
+    .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -61,7 +61,7 @@ router.patch('/bookmark', (req, res) => {
     { email: req.body.email },
     { $addToSet: { bookmarks: req.body.bookmark } }
   )
-    .then(() => { res.json('Bookmark added!') })
+    .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -70,7 +70,7 @@ router.delete('/bookmark/:id', (req, res) => {
     { id: req.params.id },
     { $pull: { bookmarks: req.body.bookmark } }
   )
-    .then(() => { res.json('Bookmark deleted!') })
+    .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -81,7 +81,7 @@ router.patch('/heart', (req, res) => {
     { id: req.params.id },
     { $set: { heart: req.body.heart } }
   )
-    .then(() => { res.json('Updated Hearts') })
+    .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 

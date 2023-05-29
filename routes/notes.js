@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
   const newNote = new Note({ creator, title, body });
 
   newNote.save()
-    .then(() => { res.json('Note added!') })
+    .then((note) => { res.json(note) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -40,7 +40,7 @@ router.patch('/:id', (req, res) => {
     { id: req.params.id },
     { $set: { title, body } }
   )
-    .then(() => { res.json('Note updated!') })
+    .then((note) => { res.json(note) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
