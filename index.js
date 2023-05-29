@@ -23,20 +23,20 @@ app.use('/users', usersRoutes);
 app.use('/notes', notesRoutes);
 app.use('/money', moneyRoutes);
 
-const newMoney = new Money({ totalmoney: 0 });
-
-newMoney.save()
-  .then(() => { console.log('Money created!') })
-  .catch((err) => { console.log('Error: ' + err) })
-
-Money.deleteMany({ totalmoney: 0 }, {})
-  .then(() => { console.log('Money deleted!') })
-  .catch((err) => { console.log('Error: ' + err) })
-
 let value = 0.1;
 var result = {};
 
 if (connectToDB) {
+  const newMoney = new Money({ totalmoney: 0 });
+
+  newMoney.save()
+    .then(() => { /* console.log('Money created!') */ })
+    .catch((err) => { console.log('Error: ' + err) })
+
+  Money.deleteMany({ totalmoney: 0 }, {})
+    .then(() => { /* console.log('Money deleted!') */ })
+    .catch((err) => { console.log('Error: ' + err) })
+
   setInterval(async () => {
     await Money.findOneAndUpdate({}, { $inc: { totalmoney: value } })
       .then((res) => {

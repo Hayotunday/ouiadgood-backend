@@ -6,37 +6,37 @@ const router = express.Router();
 // all routes in here are starting with /notes
 
 // Note
-router.get('/:id', (req, res) => {
-  Note.find({
+router.get('/:id', async (req, res) => {
+  await Note.find({
     creator: req.params.id
   }).populate('creator')
     .then((notes) => { res.json(notes) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const creator = req.body.creator;
   const title = req.body.title;
   const body = req.body.body;
 
   const newNote = new Note({ creator, title, body });
 
-  newNote.save()
+  await newNote.save()
     .then((note) => { res.json(note) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.delete('/:id', (req, res) => {
-  Note.findByIdAndDelete(req.params.id)
+router.delete('/:id', async (req, res) => {
+  await Note.findByIdAndDelete(req.params.id)
     .then(() => { res.json('Note deleted!') })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.patch('/:id', (req, res) => {
+router.patch('/:id', async (req, res) => {
   const title = req.body.title;
   const body = req.body.body;
 
-  Note.updateOne(
+  await Note.updateOne(
     { id: req.params.id },
     { $set: { title, body } }
   )

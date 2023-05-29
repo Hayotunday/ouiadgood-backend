@@ -6,38 +6,51 @@ const router = express.Router();
 // all routes in here are starting with /users
 
 // User
-router.get('/', (req, res) => {
-  User.find()
+router.get('/', async (req, res) => {
+  await User.find()
     .then((users) => { res.json(users) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.get('/:id', (req, res) => {
-  User.findById(req.params.id)
+router.get('/:id', async (req, res) => {
+  await User.findById(req.params.id)
     .then((users) => { res.json(users) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.post('/add', (req, res) => {
+router.post('/add', async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const username = req.body.email;
 
   const newUser = new User({ email, username, password, heart: '0' });
 
-  newUser.save()
-    .then((user) => { res.json(user) })
-    .catch((err) => { res.status(400).json('Error: ' + err) })
+  try {
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (user) {
+      // User already exists, send user data
+      res.status(200).json({ user });
+    } else {
+      // User doesn't exist, create a new user and add to the database
+      await newUser.save()
+        .then((user) => { res.status(201).json(user) })
+        .catch((err) => { res.status(400).json('Error: ' + err) })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
-router.delete('/:id', (req, res) => {
-  User.findByIdAndDelete(req.params.id)
+router.delete('/:id', async (req, res) => {
+  await User.findByIdAndDelete(req.params.id)
     .then(() => { res.json('User deleted!') })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.patch('/', (req, res) => {
-  User.updateOne(
+router.patch('/', async (req, res) => {
+  await User.updateOne(
     { email: req.body.email },
     { $set: { username: req.body.username } }
   )
@@ -45,8 +58,8 @@ router.patch('/', (req, res) => {
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.patch('/resetpassword/', (req, res) => {
-  User.updateOne(
+router.patch('/resetpassword/', async (req, res) => {
+  await User.updateOne(
     { email: req.body.email },
     { $set: { password: req.body.password } }
   )
@@ -56,8 +69,14 @@ router.patch('/resetpassword/', (req, res) => {
 
 
 // Bookmarks
-router.patch('/bookmark', (req, res) => {
-  User.updateOne(
+router.get('/getbookmark/:id', async (req, res) => {
+  await User.findById(req.params.id)
+    .then((user) => { res.json(user.bookmarks) })
+    .catch((err) => { res.status(400).json('Error: ' + err) })
+});
+
+router.patch('/bookmark', async (req, res) => {
+  await User.updateOne(
     { email: req.body.email },
     { $addToSet: { bookmarks: req.body.bookmark } }
   )
@@ -65,8 +84,8 @@ router.patch('/bookmark', (req, res) => {
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.delete('/bookmark/:id', (req, res) => {
-  User.updateOne(
+router.delete('/bookmark/:id', async (req, res) => {
+  await User.updateOne(
     { id: req.params.id },
     { $pull: { bookmarks: req.body.bookmark } }
   )
@@ -76,12 +95,18 @@ router.delete('/bookmark/:id', (req, res) => {
 
 
 // Hearts
-router.patch('/heart', (req, res) => {
-  User.updateOne(
+router.get('/getheart/:id', async (req, res) => {
+  await User.updateOne(
     { id: req.params.id },
     { $set: { heart: req.body.heart } }
   )
     .then((user) => { res.json(user) })
+    .catch((err) => { res.status(400).json('Error: ' + err) })
+});
+
+router.patch('/heart', async (req, res) => {
+  await User.findById(req.params.id)
+    .then((user) => { res.json(user.heart) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
