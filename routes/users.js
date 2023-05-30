@@ -99,24 +99,15 @@ router.delete('/bookmark/:id', async (req, res) => {
 // Hearts
 router.get('/getheart/:id', async (req, res) => {
   await User.findById(req.params.id)
-    .then((user) => { res.json(user.heart) })
+    .then((user) => { res.json({ heart: user.heart, totalheart: user.totalheart }) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
 router.patch('/heart', async (req, res) => {
-  let shouldUpdateAll = req.body.updateTotal;
-
-  if (shouldUpdateAll) {
-    await User.updateOne(
-      { email: req.body.email },
-      { $set: { heart: req.body.heart, totalheart: req.body.heart } }
-    )
-  } else {
-    await User.updateOne(
-      { email: req.body.email },
-      { $set: { heart: req.body.heart } }
-    )
-  }
+  await User.updateOne(
+    { email: req.body.email },
+    { $set: { heart: req.body.heart, totalheart: req.body.totalheart } }
+  )
   await User.findOne({ email: req.body.email })
     .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
