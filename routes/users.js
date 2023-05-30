@@ -24,6 +24,7 @@ router.post('/add', async (req, res) => {
   const username = req.body.email;
 
   const newUser = new User({ email, username, password, heart: '0' });
+  // const newUser = new User({ email, username, password, heart: '0', totalheart: '0' });
 
   try {
     // Check if user exists
@@ -103,11 +104,12 @@ router.get('/getheart/:id', async (req, res) => {
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
-router.patch('/heart/:id', async (req, res) => {
+router.patch('/heart', async (req, res) => {
   await User.updateOne(
-    { id: req.params.id },
+    { email: req.body.email },
     { $set: { heart: req.body.heart } }
   )
+  await User.findOne({ email: req.body.email })
     .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });

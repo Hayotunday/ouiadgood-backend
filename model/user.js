@@ -19,6 +19,9 @@ const UserSchema = new Schema({
   heart: {
     type: Number,
   },
+  // totalheart: {
+  //   type: Number,
+  // },
   bookmarks: {
     type: Array,
   },
