@@ -24,16 +24,17 @@ app.use('/notes', notesRoutes);
 app.use('/money', moneyRoutes);
 
 let value = 0.01;
+var moneyValue = 0;
 var result = {};
 
 if (connectToDB) {
-  const newMoney = new Money({ totalmoney: 0 });
+  const newMoney = new Money({ totalmoney: moneyValue++ });
 
   newMoney.save()
     .then(() => { /* console.log('Money created!') */ })
     .catch((err) => { console.log('Error: ' + err) })
 
-  Money.deleteMany({ totalmoney: 0 }, {})
+  Money.deleteMany({ totalmoney: { $gt: 0 } })
     .then(() => { /* console.log('Money deleted!') */ })
     .catch((err) => { console.log('Error: ' + err) })
 
