@@ -34,7 +34,7 @@ if (connectToDB) {
     .then(() => { /* console.log('Money created!') */ })
     .catch((err) => { console.log('Error: ' + err) })
 
-  Money.deleteMany({ totalmoney: { $gt: 0 } })
+  Money.deleteMany({ no: { $gt: 0 } })
     .then(() => { /* console.log('Money deleted!') */ })
     .catch((err) => { console.log('Error: ' + err) })
 
