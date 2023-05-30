@@ -8,6 +8,7 @@ const UserSchema = new Schema({
   },
   username: {
     type: String,
+    unique: [true, 'Email already exists!'],
     require: [true, 'Username is required!'],
     trim: true,
     minlength: 3
@@ -19,9 +20,12 @@ const UserSchema = new Schema({
   heart: {
     type: Number,
   },
-  // totalheart: {
-  //   type: Number,
-  // },
+  totalheart: {
+    type: Number,
+  },
+  tabs: {
+    type: Number,
+  },
   bookmarks: {
     type: Array,
   },

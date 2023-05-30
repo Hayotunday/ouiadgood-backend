@@ -23,7 +23,7 @@ app.use('/users', usersRoutes);
 app.use('/notes', notesRoutes);
 app.use('/money', moneyRoutes);
 
-let value = 0.1;
+let value = 0.01;
 var result = {};
 
 if (connectToDB) {
