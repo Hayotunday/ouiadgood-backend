@@ -3,12 +3,12 @@ import mongoose, { Schema, model } from "mongoose";
 const UserSchema = new Schema({
   email: {
     type: String,
-    unique: [true, 'Email already exists!'],
+    unique: [true, 'Email already exists!. Enter another email that is unique'],
     required: [true, 'Email is required!'],
   },
   username: {
     type: String,
-    unique: [true, 'Email already exists!'],
+    unique: [true, 'Username already exist!. Enter another username that is unique'],
     require: [true, 'Username is required!'],
     trim: true,
     minlength: 3

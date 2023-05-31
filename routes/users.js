@@ -50,13 +50,25 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.patch('/', async (req, res) => {
-  await User.updateOne(
-    { email: req.body.email },
-    { $set: { username: req.body.username } }
-  )
-  await User.findOne({ email: req.body.email })
-    .then((user) => { res.json(user) })
-    .catch((err) => { res.status(400).json('Error: ' + err) })
+  const userExist = await User.findOne({ username: req.body.username });
+
+  if (!userExist) {
+    await User.updateOne(
+      { email: req.body.email },
+      { $set: { username: req.body.username } }
+    )
+    await User.findOne({ email: req.body.email })
+      .then((user) => { res.json(user) })
+      .catch((err) => {
+        res.status(400).json('Error: ' + err);
+      })
+  } else {
+    await User.findOne({ email: req.body.email })
+      .then(() => { res.json('<script>alert("Username already exist!. Enter another username that is unique")</script>'); })
+      .catch((err) => {
+        res.status(400).json('Error: ' + err);
+      })
+  }
 });
 
 router.patch('/resetpassword', async (req, res) => {
@@ -109,6 +121,16 @@ router.patch('/heart', async (req, res) => {
     { $set: { heart: req.body.heart, totalheart: req.body.totalheart } }
   )
   await User.findOne({ email: req.body.email })
+    .then((user) => { res.json(user) })
+    .catch((err) => { res.status(400).json('Error: ' + err) })
+});
+
+router.patch('/referral', async (req, res) => {
+  await User.updateOne(
+    { username: req.body.username },
+    { $set: { heart: req.body.heart, totalheart: req.body.heart } }
+  )
+  await User.findOne({ username: req.body.username })
     .then((user) => { res.json(user) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });

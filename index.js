@@ -40,6 +40,8 @@ if (connectToDB) {
 
   setInterval(async () => {
     await Money.findOneAndUpdate({}, { $inc: { totalmoney: value } })
+      // await Money.find()
+      //   .then((resp) => { res.json(resp) })
       .then((res) => {
         result = { ...result, res }
       })
