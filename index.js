@@ -3,13 +3,13 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 
+import { connectToDB } from './connection.js'
+
 import usersRoutes from './routes/users.js'
-import notesRoutes from './routes/notes.js'
+import todosRoutes from './routes/todos.js'
 import moneyRoutes from './routes/money.js'
 
 import Money from './model/money.js'
-
-import { connectToDB } from './connection.js'
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -20,7 +20,7 @@ app.use(express.json());
 connectToDB();
 
 app.use('/users', usersRoutes);
-app.use('/notes', notesRoutes);
+app.use('/todos', todosRoutes);
 app.use('/money', moneyRoutes);
 
 let value = 0.01;
@@ -40,8 +40,6 @@ if (connectToDB) {
 
   setInterval(async () => {
     await Money.findOneAndUpdate({}, { $inc: { totalmoney: value } })
-      // await Money.find()
-      //   .then((resp) => { res.json(resp) })
       .then((res) => {
         result = { ...result, res }
       })

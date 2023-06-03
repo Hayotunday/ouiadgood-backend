@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 
-const NoteSchema = new Schema({
+const TodoSchema = new Schema({
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -19,6 +19,6 @@ const NoteSchema = new Schema({
   timestamps: true
 })
 
-const Note = mongoose.models.Note || model("Note", NoteSchema);
+const Todo = mongoose.models.Todo || model("Todo", TodoSchema);
 
-export default Note
+export default Todo

@@ -1,5 +1,5 @@
 import express from "express";
-import Note from '../model/note.js'
+import Todo from '../model/todo.js'
 
 const router = express.Router();
 
@@ -7,10 +7,10 @@ const router = express.Router();
 
 // Note
 router.get('/:id', async (req, res) => {
-  await Note.find({
+  await Todo.find({
     creator: req.params.id
   }).populate('creator')
-    .then((notes) => { res.json(notes) })
+    .then((todos) => { res.json(todos) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -19,16 +19,16 @@ router.post('/', async (req, res) => {
   const title = req.body.title;
   const body = req.body.body;
 
-  const newNote = new Note({ creator, title, body });
+  const newTodo = new Note({ creator, title, body });
 
-  await newNote.save()
-    .then((note) => { res.json(note) })
+  await newTodo.save()
+    .then((todo) => { res.json(todo) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
 router.delete('/:id', async (req, res) => {
-  await Note.findByIdAndDelete(req.params.id)
-    .then(() => { res.json('Note deleted!') })
+  await Todo.findByIdAndDelete(req.params.id)
+    .then(() => { res.json('Todo deleted!') })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
@@ -36,11 +36,11 @@ router.patch('/:id', async (req, res) => {
   const title = req.body.title;
   const body = req.body.body;
 
-  await Note.updateOne(
+  await Todo.updateOne(
     { id: req.params.id },
     { $set: { title, body } }
   )
-    .then((note) => { res.json(note) })
+    .then((todo) => { res.json(todo) })
     .catch((err) => { res.status(400).json('Error: ' + err) })
 });
 
