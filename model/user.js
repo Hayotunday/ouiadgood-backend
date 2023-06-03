@@ -23,11 +23,8 @@ const UserSchema = new Schema({
   totalheart: {
     type: Number,
   },
-  tabs: {
-    type: Number,
-  },
-  bookmarks: {
-    type: Array,
+  referral: {
+    type: Boolean,
   },
 }, {
   timestamps: true

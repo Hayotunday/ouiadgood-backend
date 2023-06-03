@@ -23,7 +23,7 @@ router.post('/add', async (req, res) => {
   const password = req.body.password;
   const username = req.body.email;
 
-  const newUser = new User({ email, username, password, heart: '0', totalheart: '0', tab: "0" });
+  const newUser = new User({ email, username, password, heart: '0', totalheart: '0', referral: false, });
 
   try {
     // Check if user exists
@@ -64,7 +64,7 @@ router.patch('/', async (req, res) => {
       })
   } else {
     await User.findOne({ email: req.body.email })
-      .then(() => { res.json('<script>alert("Username already exist!. Enter another username that is unique")</script>'); })
+      .then(() => { res.send('<script>alert("Username already exist!. Enter another username that is unique")</script>'); })
       .catch((err) => {
         res.status(400).json('Error: ' + err);
       })
@@ -126,13 +126,20 @@ router.patch('/heart', async (req, res) => {
 });
 
 router.patch('/referral', async (req, res) => {
-  await User.updateOne(
-    { username: req.body.username },
-    { $set: { heart: req.body.heart, totalheart: req.body.heart } }
-  )
-  await User.findOne({ username: req.body.username })
-    .then((user) => { res.json(user) })
-    .catch((err) => { res.status(400).json('Error: ' + err) })
+  const isReferred = await User.findOne({ username: req.body.username });
+
+  if (!isReferred.referral) {
+    await User.updateOne(
+      { username: req.body.username },
+      { $set: { referral: true }, $inc: { heart: 350, totalheart: 350 } }
+    )
+      .then(() => { res.json("Referral successful!") })
+      .catch((err) => { res.status(400).json('Error: ' + err) })
+  } else {
+    await User.findOne({ username: req.body.username })
+      .then(() => { res.send('<script>alert("Could not be set has already referred")</script>'); })
+      .catch(() => { res.status(400).json('Error: ' + err) })
+  }
 });
 
 export default router
