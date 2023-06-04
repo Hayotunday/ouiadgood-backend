@@ -134,14 +134,14 @@ router.patch('/referral', async (req, res) => {
       { $inc: { heart: 350, totalheart: 350 } }
     )
     await User.updateOne(
-      { id: req.body.id },
+      { email: req.body.email },
       { $set: { referral: true } }
     )
-    await User.findOne({ id: req.body.id })
+    await User.findOne({ email: req.body.email })
       .then((user) => { res.json(user) })
       .catch((err) => { res.status(400).json('Error: ' + err) })
   } else {
-    await User.findOne({ id: req.body.id })
+    await User.findOne({ email: req.body.email })
       .then((user) => { res.json(user) })
       .catch(() => { res.status(400).json('Error: ' + err) })
   }
