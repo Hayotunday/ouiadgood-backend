@@ -23,7 +23,7 @@ router.post('/add', async (req, res) => {
   const password = req.body.password;
   const username = req.body.email;
 
-  const newUser = new User({ email, username, password, heart: '0', totalheart: '0', referral: false, });
+  const newUser = new User({ email, username, password, heart: '0', totalheart: '0', referral: false, numberOfReferred: "0" });
 
   try {
     // Check if user exists
@@ -131,7 +131,7 @@ router.patch('/referral', async (req, res) => {
   if (!isReferred.referral) {
     await User.updateOne(
       { username: req.body.username },
-      { $inc: { heart: 350, totalheart: 350 } }
+      { $inc: { heart: 350, totalheart: 350, numberOfReferred: 1 } }
     )
     await User.updateOne(
       { email: req.body.email },

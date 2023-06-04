@@ -23,7 +23,7 @@ app.use('/users', usersRoutes);
 app.use('/todos', todosRoutes);
 app.use('/money', moneyRoutes);
 
-let value = 0.01;
+var value = 0.01;
 var moneyValue = 0;
 var result = {};
 

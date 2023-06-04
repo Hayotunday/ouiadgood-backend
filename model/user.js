@@ -26,6 +26,9 @@ const UserSchema = new Schema({
   referral: {
     type: Boolean,
   },
+  numberOfReferred: {
+    type: Number,
+  },
 }, {
   timestamps: true
 })
