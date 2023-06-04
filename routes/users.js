@@ -131,13 +131,18 @@ router.patch('/referral', async (req, res) => {
   if (!isReferred.referral) {
     await User.updateOne(
       { username: req.body.username },
-      { $set: { referral: true }, $inc: { heart: 350, totalheart: 350 } }
+      { $inc: { heart: 350, totalheart: 350 } }
     )
-      .then(() => { res.json("Referral successful!") })
+    await User.updateOne(
+      { id: req.body.id },
+      { $set: { referral: true } }
+    )
+    await User.findOne({ id: req.body.id })
+      .then((user) => { res.json(user) })
       .catch((err) => { res.status(400).json('Error: ' + err) })
   } else {
-    await User.findOne({ username: req.body.username })
-      .then(() => { res.send('<script>alert("Could not be set has already referred")</script>'); })
+    await User.findOne({ id: req.body.id })
+      .then((user) => { res.json(user) })
       .catch(() => { res.status(400).json('Error: ' + err) })
   }
 });
