@@ -6,7 +6,7 @@ import cors from 'cors';
 import { connectToDB } from './connection.js'
 
 import usersRoutes from './routes/users.js'
-import todosRoutes from './routes/todos.js'
+import todosRoutes from './routes/charity.js'
 import moneyRoutes from './routes/money.js'
 
 import Money from './model/money.js'
@@ -20,7 +20,7 @@ app.use(express.json());
 connectToDB();
 
 app.use('/users', usersRoutes);
-app.use('/todos', todosRoutes);
+app.use('/charity', charityRoutes);
 app.use('/money', moneyRoutes);
 
 var value = 0.01;

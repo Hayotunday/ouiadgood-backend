@@ -1,5 +1,6 @@
 import express from "express";
 import User from "../model/user.js";
+import Charity from "../model/charity.js";
 
 const router = express.Router();
 
@@ -118,7 +119,21 @@ router.get('/getheart/:id', async (req, res) => {
 router.patch('/heart', async (req, res) => {
   await User.updateOne(
     { email: req.body.email },
-    { $set: { heart: req.body.heart, totalheart: req.body.totalheart } }
+    { $inc: { heart: req.body.heart, totalheart: req.body.totalheart } }
+  )
+  await User.findOne({ email: req.body.email })
+    .then((user) => { res.json(user) })
+    .catch((err) => { res.status(400).json('Error: ' + err) })
+});
+
+router.patch('/donate/:id', async (req, res) => {
+  await User.updateOne(
+    { email: req.body.email },
+    { $dec: { heart: req.body.heart } }
+  )
+  await Charity.updateOne(
+    { id: req.params.id },
+    { $inc: { heart: req.body.heart } }
   )
   await User.findOne({ email: req.body.email })
     .then((user) => { res.json(user) })
