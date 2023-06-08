@@ -46,6 +46,7 @@ router.delete('/delete-all', async (req, res) => {
 router.patch('/:id', async (req, res) => {
   const name = req.body.name;
   const about = req.body.about;
+  // const image = req.body.image;
 
   await Charity.updateOne(
     { id: req.params.id },
