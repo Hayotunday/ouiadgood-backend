@@ -119,7 +119,7 @@ router.get('/getheart/:id', async (req, res) => {
 router.patch('/heart', async (req, res) => {
   await User.updateOne(
     { email: req.body.email },
-    { $inc: { heart: req.body.heart, totalheart: req.body.totalheart } }
+    { $set: { heart: req.body.heart, totalheart: req.body.totalheart } }
   )
   await User.findOne({ email: req.body.email })
     .then((user) => { res.json(user) })
