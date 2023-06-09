@@ -16,7 +16,8 @@ const CharitySchema = new Schema({
     type: Number,
   },
   // image: {
-  //   type: String,
+  //   data: Buffer,
+  //   contentType: String,
   // }
 }, {
   timestamps: true
