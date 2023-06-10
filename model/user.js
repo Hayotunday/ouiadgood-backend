@@ -17,6 +17,10 @@ const UserSchema = new Schema({
     type: String,
     require: [true, 'Password is required!'],
   },
+  admin: {
+    type: Boolean,
+    require: [true, 'Administrative status required is required!'],
+  },
   heart: {
     type: Number,
   },

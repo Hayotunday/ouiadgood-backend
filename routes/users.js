@@ -24,7 +24,16 @@ router.post('/add', async (req, res) => {
   const password = req.body.password;
   const username = req.body.email;
 
-  const newUser = new User({ email, username, password, heart: '0', totalheart: '0', referral: false, numberOfReferred: "0" });
+  const newUser = new User({
+    email,
+    username,
+    password,
+    heart: '0',
+    totalheart: '0',
+    referral: false,
+    numberOfReferred: "0",
+    admin: false
+  });
 
   try {
     // Check if user exists
