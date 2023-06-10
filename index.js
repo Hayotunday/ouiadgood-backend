@@ -6,7 +6,7 @@ import cors from 'cors';
 import { connectToDB } from './connection.js'
 
 import usersRoutes from './routes/users.js'
-import todosRoutes from './routes/charity.js'
+import charityRoutes from './routes/charity.js'
 import moneyRoutes from './routes/money.js'
 
 import Money from './model/money.js'
