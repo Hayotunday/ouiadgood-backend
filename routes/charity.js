@@ -1,7 +1,18 @@
 import express from "express";
+import multer from "multer";
 import Charity from '../model/charity.js'
 
 const router = express.Router();
+const Storage = multer.diskStorage({
+  destination: 'uploads',
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+})
+
+const upload = multer({
+  storage: Storage
+}).single('image')
 
 // all routes in here are starting with /charity
 
@@ -19,14 +30,27 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-  const name = req.body.name;
-  const about = req.body.about;
+  await upload(req, res, (err) => {
+    if (err) {
+      console.log(err)
+    } else {
+      const name = req.body.name;
+      const about = req.body.about;
+      const image = { data: req.file.filename, contentType: 'image/png' };
+      console.log(image)
 
-  const newCharity = new Charity({ name, about, heart: '0' });
+      const newCharity = new Charity({
+        name,
+        about,
+        image,
+        heart: '0'
+      });
 
-  await newCharity.save()
-    .then((charities) => { res.json(charities) })
-    .catch((err) => { res.status(400).json('Error: ' + err) })
+      newCharity.save()
+        .then((charities) => { res.json(charities) })
+        .catch((err) => { res.status(400).json('Error: ' + err) })
+    }
+  })
 });
 
 router.delete('/:id', async (req, res) => {
@@ -44,17 +68,23 @@ router.delete('/:id', async (req, res) => {
 // });
 
 router.patch('/:id', async (req, res) => {
-  const name = req.body.name;
-  const about = req.body.about;
-  // const image = req.body.image;
+  await upload(req, res, (err) => {
+    if (err) {
+      console.log(err)
+    } else {
+      const name = req.body.name;
+      const about = req.body.about;
+      const image = { data: req.file.filename, contentType: 'image/png' };
 
-  await Charity.updateOne(
-    { id: req.params.id },
-    { $set: { name, about } }
-  )
-  await Charity.findOne({ name: req.body.name })
-    .then((charity) => { res.json(charity) })
-    .catch((err) => { res.status(400).json('Error: ' + err) })
+      Charity.updateOne(
+        { id: req.params.id },
+        { $set: { name, about, image } }
+      )
+      Charity.findOne({ name: req.body.name })
+        .then((charity) => { res.json(charity) })
+        .catch((err) => { res.status(400).json('Error: ' + err) })
+    }
+  })
 });
 
 export default router

@@ -15,10 +15,10 @@ const CharitySchema = new Schema({
   heart: {
     type: Number,
   },
-  // image: {
-  //   data: Buffer,
-  //   contentType: String,
-  // }
+  image: {
+    data: Buffer,
+    contentType: String,
+  }
 }, {
   timestamps: true
 })
