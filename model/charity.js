@@ -15,6 +15,9 @@ const CharitySchema = new Schema({
   heart: {
     type: Number,
   },
+  url: {
+    type: String,
+  },
   image: {
     data: Buffer,
     contentType: String,

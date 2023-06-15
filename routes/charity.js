@@ -36,13 +36,15 @@ router.post('/add', async (req, res) => {
     } else {
       const name = req.body.name;
       const about = req.body.about;
-      const image = { data: req.file.filename, contentType: 'image/png' };
+      const url = req.body.url;
+      const image = { data: req.file.filename === undefined ? "" : req.file.filename, contentType: 'image/png' };
       console.log(image)
 
       const newCharity = new Charity({
         name,
         about,
         image,
+        url,
         heart: '0'
       });
 
@@ -74,6 +76,7 @@ router.patch('/:id', async (req, res) => {
     } else {
       const name = req.body.name;
       const about = req.body.about;
+      const url = req.body.url;
       const image = { data: req.file.filename, contentType: 'image/png' };
 
       Charity.updateOne(
