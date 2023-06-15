@@ -81,7 +81,7 @@ router.patch('/:id', async (req, res) => {
 
       Charity.updateOne(
         { id: req.params.id },
-        { $set: { name, about, image } }
+        { $set: { name, about, image, url } }
       )
       Charity.findOne({ name: req.body.name })
         .then((charity) => { res.json(charity) })
