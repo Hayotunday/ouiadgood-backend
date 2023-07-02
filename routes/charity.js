@@ -3,16 +3,8 @@ import multer from "multer";
 import Charity from '../model/charity.js'
 
 const router = express.Router();
-const Storage = multer.diskStorage({
-  destination: 'uploads',
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  }
-})
 
-const upload = multer({
-  storage: Storage
-}).single('image')
+const upload = multer({ storage: multer.memoryStorage() })
 
 // all routes in here are starting with /charity
 
@@ -37,8 +29,7 @@ router.post('/add', async (req, res) => {
       const name = req.body.name;
       const about = req.body.about;
       const url = req.body.url;
-      const image = { data: req.file.filename === undefined ? "" : req.file.filename, contentType: 'image/png' };
-      console.log(image)
+      const image = req.file.buffer.toString('base64');
 
       const newCharity = new Charity({
         name,
@@ -77,7 +68,7 @@ router.patch('/:id', async (req, res) => {
       const name = req.body.name;
       const about = req.body.about;
       const url = req.body.url;
-      const image = { data: req.file.filename, contentType: 'image/png' };
+      const image = req.file.buffer.toString('base64');
 
       Charity.updateOne(
         { id: req.params.id },
