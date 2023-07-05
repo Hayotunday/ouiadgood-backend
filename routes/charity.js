@@ -25,7 +25,7 @@ router.post('/add', upload.single('image'), async (req, res) => {
   const name = req.body.name;
   const about = req.body.about;
   const url = req.body.url;
-  const image = req.file.buffer.toString('base64');
+  const image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
 
   const newCharity = new Charity({
     name,
@@ -58,7 +58,7 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
   const name = req.body.name;
   const about = req.body.about;
   const url = req.body.url;
-  const image = req.file.buffer.toString('base64');
+  const image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
 
   Charity.updateOne(
     { id: req.params.id },
