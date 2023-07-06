@@ -55,6 +55,7 @@ router.delete('/:id', async (req, res) => {
 // });
 
 router.patch('/:id', upload.single('image'), async (req, res) => {
+
   const name = req.body.name;
   const about = req.body.about;
   const url = req.body.url;
@@ -66,16 +67,16 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
       { $set: { name, about, url } }
     )
     Charity.findOne({ name: req.body.name })
-      .then((charity) => { res.json(charity) })
-      .catch((err) => { res.status(400).json('Error: ' + err) })
+      .then((charity) => { return res.status(200).json(charity) })
+      .catch((err) => { return res.status(400).json('Error: ' + err) })
   } else {
     Charity.updateOne(
       { id: req.params.id },
       { $set: { name, about, image, url } }
     )
     Charity.findOne({ name: req.body.name })
-      .then((charity) => { res.json(charity) })
-      .catch((err) => { res.status(400).json('Error: ' + err) })
+      .then((charity) => { return res.status(200).json(charity) })
+      .catch((err) => { return res.status(400).json('Error: ' + err) })
   }
 });
 
