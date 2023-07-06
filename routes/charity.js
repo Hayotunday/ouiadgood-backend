@@ -55,30 +55,49 @@ router.delete('/:id', async (req, res) => {
 // });
 
 router.patch('/:id', upload.single('image'), async (req, res) => {
-  console.log(req)
-  const image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
+  const new_image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
   const ID = new mongoose.Types.ObjectId(req.params.id)
+  const { name, about, url } = req.body
   try {
-    if (image === "") {
-      Charity.findByIdAndUpdate(
-        { id: ID },
-        { $set: { name: req.body.name, about: req.body.about, url: req.body.url } }
-      )
-      Charity.findOne({ name: req.body.name })
-        .then((charity) => { console.log(charity); return res.status(200).json(charity) })
-        .catch((err) => { console.log(err); return res.status(400).json('Error: ' + err) })
-    } else {
-      Charity.findByIdAndUpdate(
-        { id: ID },
-        { $set: { name: req.body.name, about: req.body.about, image: req.body.image, url: req.body.url } }
-      )
-      Charity.findOne({ name: req.body.name })
-        .then((charity) => { console.log(charity); return res.status(200).json(charity) })
-        .catch((err) => { console.log(err); return res.status(400).json('Error: ' + err) })
-    }
+    Charity.findOneAndUpdate(
+      { id: ID },
+      { name, about, url, image: new_image },
+      { new: true }
+    ).then((updated) => {
+      res.status(200).json({
+        name: updated.name,
+        about: updated.about,
+        url: updated.url,
+      })
+    }).catch(err => {
+      res.status(400).json("Error")
+    })
   } catch (error) {
     return res.sendStatus(500)
   }
 });
 
 export default router
+
+
+// router.patch('/:id', upload.single('image'), async (req, res) => {
+//   const new_image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
+//   // const ID = new mongoose.Types.ObjectId(req.params.id)
+//   try {
+//     if (image === "") {
+//       Charity.updateOne(
+//         { _id: req.params.id },
+//         { $set: { name: req.body.name, about: req.body.about, url: req.body.url } }
+//       ).then((charity) => { return res.status(200).json(charity) })
+//         .catch((err) => { return res.status(400).json('Error: ' + err) })
+//     } else {
+//       Charity.updateOne(
+//         { _id: req.params.id },
+//         { $set: { name: req.body.name, about: req.body.about, image: new_image, url: req.body.url } }
+//       ).then((charity) => { return res.status(200).json(charity) })
+//         .catch((err) => { return res.status(400).json('Error: ' + err) })
+//     }
+//   } catch (error) {
+//     return res.sendStatus(500)
+//   }
+// });
