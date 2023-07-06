@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import Charity from '../model/charity.js'
-
+import mongoose from "mongoose";
 const router = express.Router();
 
 const upload = multer({ storage: multer.memoryStorage() })
@@ -57,11 +57,11 @@ router.delete('/:id', async (req, res) => {
 router.patch('/:id', upload.single('image'), async (req, res) => {
   console.log(req)
   const image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
-
+  const ID = mongoose.Types.ObjectId(req.params.id)
   try {
     if (image === "") {
       Charity.findByIdAndUpdate(
-        { id: req.params.id },
+        { id: ID },
         { $set: { name: req.body.name, about: req.body.about, url: req.body.url } }
       )
       Charity.findOne({ name: req.body.name })
@@ -69,7 +69,7 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
         .catch((err) => { console.log(err); return res.status(400).json('Error: ' + err) })
     } else {
       Charity.findByIdAndUpdate(
-        { id: req.params.id },
+        { id: ID },
         { $set: { name: req.body.name, about: req.body.about, image: req.body.image, url: req.body.url } }
       )
       Charity.findOne({ name: req.body.name })
