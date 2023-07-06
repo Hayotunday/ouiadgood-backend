@@ -151,7 +151,7 @@ router.patch('/donate/:id', async (req, res) => {
 
 router.patch('/referral', async (req, res) => {
   try {
-    const isReferred = await User.findOne({ username: req.body.receiver });
+    const isReferred = await User.findOne({ username: req.body.email });
     if (!isReferred) {
       return res.status(401).json("Receiver does not exist")
     }
