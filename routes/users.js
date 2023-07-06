@@ -150,11 +150,11 @@ router.patch('/donate/:id', async (req, res) => {
 });
 
 router.patch('/referral', async (req, res) => {
-  const isReferred = await User.findOne({ username: req.body.username });
+  const isReferred = await User.findOne({ username: req.body.receiver });
 
   if (!isReferred.referral) {
     await User.updateOne(
-      { username: req.body.username },
+      { username: req.body.receiver },
       { $inc: { heart: 350, totalheart: 350, numberOfReferred: 1 } }
     )
     await User.updateOne(
