@@ -55,16 +55,13 @@ router.delete('/:id', async (req, res) => {
 // });
 
 router.patch('/:id', upload.single('image'), async (req, res) => {
-  const name = req.body.name;
-  const about = req.body.about;
-  const url = req.body.url;
   const image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
 
   try {
     if (image === "") {
       Charity.updateOne(
         { id: req.params.id },
-        { $set: { name, about, url } }
+        { $set: { name: req.body.name, about: req.body.about, url: req.body.url } }
       )
       Charity.findOne({ name: req.body.name })
         .then((charity) => { return res.status(200).json(charity) })
@@ -72,14 +69,14 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
     } else {
       Charity.updateOne(
         { id: req.params.id },
-        { $set: { name, about, image, url } }
+        { $set: { name: req.body.name, about: req.body.about, image: req.body.image, url: req.body.url } }
       )
       Charity.findOne({ name: req.body.name })
         .then((charity) => { return res.status(200).json(charity) })
         .catch((err) => { return res.status(400).json('Error: ' + err) })
     }
   } catch (error) {
-    return
+    return res.sendStatus(500)
   }
 });
 
