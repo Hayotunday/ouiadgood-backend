@@ -57,7 +57,7 @@ router.delete('/:id', async (req, res) => {
 router.patch('/:id', upload.single('image'), async (req, res) => {
   console.log(req)
   const image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
-  const ID = mongoose.Types.ObjectId(req.params.id)
+  const ID = new mongoose.Types.ObjectId(req.params.id)
   try {
     if (image === "") {
       Charity.findByIdAndUpdate(
