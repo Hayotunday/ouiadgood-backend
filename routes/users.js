@@ -158,7 +158,7 @@ router.patch('/referral', async (req, res) => {
 
     if (!isReferred.referral) {
       await User.updateOne(
-        { username: req.body.receiver },
+        { email: req.body.receiver },
         { $inc: { heart: 350, totalheart: 350, numberOfReferred: 1 } }
       )
       await User.updateOne(
