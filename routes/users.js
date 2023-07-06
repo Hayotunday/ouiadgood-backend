@@ -150,24 +150,31 @@ router.patch('/donate/:id', async (req, res) => {
 });
 
 router.patch('/referral', async (req, res) => {
-  const isReferred = await User.findOne({ username: req.body.receiver });
+  try {
+    const isReferred = await User.findOne({ username: req.body.receiver });
+    if (!isReferred) {
+      return res.status(401).json("Receiver does not exist")
+    }
 
-  if (!isReferred.referral) {
-    await User.updateOne(
-      { username: req.body.receiver },
-      { $inc: { heart: 350, totalheart: 350, numberOfReferred: 1 } }
-    )
-    await User.updateOne(
-      { email: req.body.email },
-      { $set: { referral: true } }
-    )
-    await User.findOne({ email: req.body.email })
-      .then((user) => { res.json(user) })
-      .catch((err) => { res.status(400).json('Error: ' + err) })
-  } else {
-    await User.findOne({ email: req.body.email })
-      .then((user) => { res.json(user) })
-      .catch(() => { res.status(400).json('Error: ' + err) })
+    if (!isReferred.referral) {
+      await User.updateOne(
+        { username: req.body.receiver },
+        { $inc: { heart: 350, totalheart: 350, numberOfReferred: 1 } }
+      )
+      await User.updateOne(
+        { email: req.body.email },
+        { $set: { referral: true } }
+      )
+      await User.findOne({ email: req.body.email })
+        .then((user) => { res.json(user) })
+        .catch((err) => { res.status(400).json('Error: ' + err) })
+    } else {
+      await User.findOne({ email: req.body.email })
+        .then((user) => { res.json(user) })
+        .catch(() => { res.status(400).json('Error: ' + err) })
+    }
+  } catch (error) {
+    return res.sendStatus(500)
   }
 });
 
