@@ -60,7 +60,7 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
 
   try {
     if (image === "") {
-      Charity.updateOne(
+      Charity.findByIdAndUpdate(
         { id: req.params.id },
         { $set: { name: req.body.name, about: req.body.about, url: req.body.url } }
       )
@@ -68,7 +68,7 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
         .then((charity) => { console.log(charity); return res.status(200).json(charity) })
         .catch((err) => { console.log(err); return res.status(400).json('Error: ' + err) })
     } else {
-      Charity.updateOne(
+      Charity.findByIdAndUpdate(
         { id: req.params.id },
         { $set: { name: req.body.name, about: req.body.about, image: req.body.image, url: req.body.url } }
       )
