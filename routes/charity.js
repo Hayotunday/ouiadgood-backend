@@ -60,13 +60,23 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
   const url = req.body.url;
   const image = req.file.buffer.toString('base64') === undefined ? "" : req.file.buffer.toString('base64');
 
-  Charity.updateOne(
-    { id: req.params.id },
-    { $set: { name, about, image, url } }
-  )
-  Charity.findOne({ name: req.body.name })
-    .then((charity) => { res.json(charity) })
-    .catch((err) => { res.status(400).json('Error: ' + err) })
+  if (image === "") {
+    Charity.updateOne(
+      { id: req.params.id },
+      { $set: { name, about, url } }
+    )
+    Charity.findOne({ name: req.body.name })
+      .then((charity) => { res.json(charity) })
+      .catch((err) => { res.status(400).json('Error: ' + err) })
+  } else {
+    Charity.updateOne(
+      { id: req.params.id },
+      { $set: { name, about, image, url } }
+    )
+    Charity.findOne({ name: req.body.name })
+      .then((charity) => { res.json(charity) })
+      .catch((err) => { res.status(400).json('Error: ' + err) })
+  }
 });
 
 export default router
